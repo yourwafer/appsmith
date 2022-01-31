@@ -24,6 +24,7 @@ import ReplayCanvas from "entities/Replay/ReplayEntity/ReplayCanvas";
 import ReplayEditor from "entities/Replay/ReplayEntity/ReplayEditor";
 import { setFormEvaluationSaga } from "./formEval";
 import { isEmpty } from "lodash";
+import { rfdc } from "components/utils/CloneDeep";
 
 const CANVAS = "canvas";
 
@@ -119,7 +120,8 @@ ctx.addEventListener(
             jsUpdates = dataTreeResponse.jsUpdates;
             // We need to clean it to remove any possible functions inside the tree.
             // If functions exist, it will crash the web worker
-            dataTree = dataTree && JSON.parse(JSON.stringify(dataTree));
+            // dataTree = dataTree && JSON.parse(JSON.stringify(dataTree));
+            dataTree = dataTree && rfdc()(dataTree);
           } else if (dataTreeEvaluator.hasCyclicalDependency) {
             if (dataTreeEvaluator && !isEmpty(allActionValidationConfig)) {
               //allActionValidationConfigs may not be set in dataTreeEvaluatior. Therefore, set it explicitly via setter method
@@ -145,7 +147,8 @@ ctx.addEventListener(
             evaluationOrder = dataTreeEvaluator.sortedDependencies;
             dataTree = dataTreeResponse.evalTree;
             jsUpdates = dataTreeResponse.jsUpdates;
-            dataTree = dataTree && JSON.parse(JSON.stringify(dataTree));
+            // dataTree = dataTree && JSON.parse(JSON.stringify(dataTree));
+            dataTree = dataTree && rfdc()(dataTree);
           } else {
             if (dataTreeEvaluator && !isEmpty(allActionValidationConfig)) {
               dataTreeEvaluator.setAllActionValidationConfig(
@@ -159,7 +162,8 @@ ctx.addEventListener(
             const updateResponse = dataTreeEvaluator.updateDataTree(unevalTree);
             evaluationOrder = updateResponse.evaluationOrder;
             unEvalUpdates = updateResponse.unEvalUpdates;
-            dataTree = JSON.parse(JSON.stringify(dataTreeEvaluator.evalTree));
+            // dataTree = JSON.parse(JSON.stringify(dataTreeEvaluator.evalTree));
+            dataTree = rfdc()(dataTreeEvaluator.evalTree);
             jsUpdates = updateResponse.jsUpdates;
           }
           dependencies = dataTreeEvaluator.inverseDependencyMap;

@@ -28,6 +28,7 @@ import { Severity } from "entities/AppsmithConsole";
 import { ParsedBody, ParsedJSSubAction } from "utils/JSPaneUtils";
 import { Variable } from "entities/JSCollection";
 import { cloneDeep } from "lodash";
+import { rfdc } from "components/utils/CloneDeep";
 
 // Dropdown1.options[1].value -> Dropdown1.options[1]
 // Dropdown1.options[1] -> Dropdown1.options
@@ -800,7 +801,8 @@ export const overrideWidgetProperties = (
   value: unknown,
   currentTree: DataTree,
 ) => {
-  const clonedValue = cloneDeep(value);
+  // const clonedValue = cloneDeep(value);
+  const clonedValue = rfdc()(value);
   if (propertyPath in entity.overridingPropertyPaths) {
     const overridingPropertyPaths =
       entity.overridingPropertyPaths[propertyPath];
@@ -822,7 +824,8 @@ export const overrideWidgetProperties = (
       entity.propertyOverrideDependency[propertyPath];
     if (propertyOverridingKeyMap.DEFAULT) {
       const defaultValue = entity[propertyOverridingKeyMap.DEFAULT];
-      const clonedDefaultValue = cloneDeep(defaultValue);
+      // const clonedDefaultValue = cloneDeep(defaultValue);
+      const clonedDefaultValue = rfdc()(defaultValue);
       if (defaultValue !== undefined) {
         _.set(
           currentTree,

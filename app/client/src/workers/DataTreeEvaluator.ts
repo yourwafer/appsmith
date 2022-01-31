@@ -80,6 +80,7 @@ import {
   ActionValidationConfigMap,
   ValidationConfig,
 } from "constants/PropertyControlConstants";
+import { rfdc } from "components/utils/CloneDeep";
 
 export default class DataTreeEvaluator {
   dependencyMap: DependencyMap = {};
@@ -167,10 +168,15 @@ export default class DataTreeEvaluator {
       ),
       evaluate: (evaluateEnd - evaluateStart).toFixed(2),
       validate: (validateEnd - validateStart).toFixed(2),
+      // dependencies: {
+      //   map: JSON.parse(JSON.stringify(this.dependencyMap)),
+      //   inverseMap: JSON.parse(JSON.stringify(this.inverseDependencyMap)),
+      //   sortedList: JSON.parse(JSON.stringify(this.sortedDependencies)),
+      // },
       dependencies: {
-        map: JSON.parse(JSON.stringify(this.dependencyMap)),
-        inverseMap: JSON.parse(JSON.stringify(this.inverseDependencyMap)),
-        sortedList: JSON.parse(JSON.stringify(this.sortedDependencies)),
+        map: rfdc()(this.dependencyMap),
+        inverseMap: rfdc()(this.inverseDependencyMap),
+        sortedList: rfdc()(this.sortedDependencies),
       },
     };
     this.logs.push({ timeTakenForFirstTree });
