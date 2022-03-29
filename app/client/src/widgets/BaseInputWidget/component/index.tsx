@@ -11,7 +11,6 @@ import {
   TextArea,
   Tag,
   IRef,
-  IRefObject,
 } from "@blueprintjs/core";
 import _, { isNil } from "lodash";
 
@@ -679,13 +678,9 @@ export interface BaseInputComponentProps extends ComponentProps {
   spellCheck?: boolean;
   maxNum?: number;
   minNum?: number;
-<<<<<<< HEAD
   inputRef?: MutableRefObject<
     HTMLTextAreaElement | HTMLInputElement | undefined | null
   >;
-=======
-  inputRef?: IRefObject<HTMLInputElement | HTMLTextAreaElement>;
->>>>>>> be82e2247 (Text wrapping)
 }
 
 export default BaseInputComponent;
