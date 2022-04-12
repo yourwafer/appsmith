@@ -1,6 +1,10 @@
 import { ButtonVariantTypes } from "components/constants";
 import { getTheme, ThemeMode } from "selectors/themeSelectors";
-import { escapeSpecialChars, sanitizeKey } from "./WidgetUtils";
+import {
+  composePropertyUpdateHook,
+  escapeSpecialChars,
+  sanitizeKey,
+} from "./WidgetUtils";
 import {
   getCustomTextColor,
   getCustomBackgroundColor,
@@ -207,5 +211,57 @@ describe(".sanitizeKey", () => {
       });
       expect(result).toEqual(expectedOutput);
     });
+  });
+});
+
+type composePropertyUpdateHookInputType = Array<
+  (
+    props: unknown,
+    propertyPath: string,
+    propertyValue: any,
+  ) =>
+    | {
+        propertyPath: string;
+        propertyValue: any;
+      }
+    | undefined
+>;
+describe("composePropertyUpdateHook", () => {
+  it("should test that it's returning a function", () => {
+    expect(typeof composePropertyUpdateHook([() => undefined])).toEqual(
+      "function",
+    );
+  });
+
+  it("should test that calling the function concats the returned values of input functions in the given order", () => {
+    const input = [() => [1], () => [2], () => [3], () => [4]];
+
+    const expected = [1, 2, 3, 4];
+
+    expect(
+      composePropertyUpdateHook(
+        (input as unknown) as composePropertyUpdateHookInputType,
+      )(null, "", null),
+    ).toEqual(expected);
+  });
+
+  it("should test that calling the function concats the returned values of input functions in the given order and ignores undefined", () => {
+    const input = [() => [1], () => undefined, () => [3], () => [4]];
+
+    const expected = [1, 3, 4];
+
+    expect(
+      composePropertyUpdateHook(
+        (input as unknown) as composePropertyUpdateHookInputType,
+      )(null, "", null),
+    ).toEqual(expected);
+  });
+
+  it("should test that calling the function without any function returns undefined", () => {
+    const input: any = [];
+
+    const expected = undefined;
+
+    expect(composePropertyUpdateHook(input)(null, "", null)).toEqual(expected);
   });
 });
