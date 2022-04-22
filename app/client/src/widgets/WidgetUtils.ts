@@ -263,7 +263,7 @@ export const sanitizeKey = (key: string, options?: SanitizeOptions) => {
  * - Often times we would wanna call more than one hook when a property is
  *   changed. Use this hook instead of nested calls
  *
- * Eack hook either returns `undefined` or an array of {propertyPath, propertyValue}
+ * Eack hook should either return `undefined` or an array of {propertyPath, propertyValue}
  * this function ignores the undefined and concats all the property update array.
  */
 export function composePropertyUpdateHook(
@@ -301,7 +301,7 @@ export function composePropertyUpdateHook(
         }
       });
 
-      return updates;
+      return updates.length ? updates : undefined;
     } else {
       return undefined;
     }
