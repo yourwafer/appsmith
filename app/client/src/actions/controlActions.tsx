@@ -82,8 +82,9 @@ export interface UpdateWidgetPropertyPayload {
   widgetId: string;
   updates: BatchPropertyUpdatePayload;
   dynamicUpdates?: {
-    dynamicBindingPathList: DynamicPath[];
-    dynamicTriggerPathList: DynamicPath[];
+    dynamicBindingPathList?: DynamicPath[];
+    dynamicTriggerPathList?: DynamicPath[];
+    dynamicPropertyPathList?: DynamicPath[];
   };
   shouldReplay?: boolean;
 }

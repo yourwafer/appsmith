@@ -28,7 +28,13 @@ export type PanelConfig = {
     props: any,
     propertyPath: string,
     propertyValue: any,
-  ) => Array<{ propertyPath: string; propertyValue: any }> | undefined;
+  ) =>
+    | Array<{
+        propertyPath: string;
+        propertyValue: any;
+        isDynamicPropertyPath?: boolean;
+      }>
+    | undefined;
 };
 
 export type PropertyPaneControlConfig = {
@@ -52,7 +58,13 @@ export type PropertyPaneControlConfig = {
     props: any,
     propertyName: string,
     propertyValue: any,
-  ) => Array<{ propertyPath: string; propertyValue: any }> | undefined;
+  ) =>
+    | Array<{
+        propertyPath: string;
+        propertyValue: any;
+        isDynamicPropertyPath?: boolean;
+      }>
+    | undefined;
   hidden?: (props: any, propertyPath: string) => boolean;
   isBindProperty: boolean;
   isTriggerProperty: boolean;

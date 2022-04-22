@@ -21,6 +21,7 @@ import { PropertyPaneControlConfig } from "constants/PropertyControlConstants";
 import { IPanelProps } from "@blueprintjs/core";
 import PanelPropertiesEditor from "./PanelPropertiesEditor";
 import {
+  DynamicPath,
   getEvalValuePath,
   isPathADynamicProperty,
   isPathADynamicTrigger,
@@ -123,11 +124,12 @@ const PropertyControl = memo((props: Props) => {
   const getWidgetsOwnUpdatesOnPropertyChange = (
     propertyName: string,
     propertyValue: any,
-  ) => {
+  ): UpdateWidgetPropertyPayload | undefined => {
     let propertiesToUpdate:
       | Array<{
           propertyPath: string;
           propertyValue: any;
+          isDynamicPropertyPath?: boolean;
         }>
       | undefined;
     // To support updating multiple properties of same widget.
@@ -140,9 +142,18 @@ const PropertyControl = memo((props: Props) => {
     }
     if (propertiesToUpdate) {
       const allUpdates: Record<string, unknown> = {};
-      propertiesToUpdate.forEach(({ propertyPath, propertyValue }) => {
-        allUpdates[propertyPath] = propertyValue;
-      });
+      const allDynamicPropertyPathUpdate: DynamicPath[] = [];
+      propertiesToUpdate.forEach(
+        ({ isDynamicPropertyPath, propertyPath, propertyValue }) => {
+          allUpdates[propertyPath] = propertyValue;
+
+          if (isDynamicPropertyPath) {
+            allDynamicPropertyPathUpdate.push({
+              key: propertyPath,
+            });
+          }
+        },
+      );
       allUpdates[propertyName] = propertyValue;
       AppsmithConsole.info({
         logType: LOG_TYPE.WIDGET_UPDATE,
@@ -161,6 +172,9 @@ const PropertyControl = memo((props: Props) => {
         widgetId: widgetProperties.widgetId,
         updates: {
           modify: allUpdates,
+        },
+        dynamicUpdates: {
+          dynamicPropertyPathList: allDynamicPropertyPathUpdate,
         },
       };
     }

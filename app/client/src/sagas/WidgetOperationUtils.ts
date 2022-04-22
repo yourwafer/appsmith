@@ -894,3 +894,13 @@ export function purgeOrphanedDynamicPaths(widget: WidgetProps) {
   }
   return widget;
 }
+
+/*
+ * Function to merge two dynamicpath arrays
+ */
+export function mergeDynamicPropertyPaths(
+  a?: DynamicPath[],
+  b?: DynamicPath[],
+) {
+  return _.unionWith(a, b, (a, b) => a.key === b.key);
+}
