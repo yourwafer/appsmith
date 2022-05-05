@@ -833,3 +833,13 @@ export const getJSCollectionParseErrors = (
     return error.severity === Severity.ERROR;
   });
 };
+
+export const getIsSavingJSCollection = (
+  state: AppState,
+  jsCollectionId: string,
+) => {
+  return (
+    jsCollectionId in state.ui.jsPane.isSaving &&
+    state.ui.jsPane.isSaving[jsCollectionId]
+  );
+};
